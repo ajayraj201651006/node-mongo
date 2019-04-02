@@ -9,18 +9,24 @@ MongoClient.connect(url, (err, client) => {
 
     console.log('Correctly Connected To Server');
     const db = client.db(dbname);
-    const colllection = db.collection('dishes');
+    const collection = db.collection('dishes');
 
     collection.insert({"name": "uthaapizza", "description": "test"}, (err, result) => {
          assert.equal(err, null);
 
          console.log("After Insert:\n");
-         console.log(results.ops);
+         console.log(result.ops);
 
          collection.find({}).toArray((err, docs) => {
              assert.equal(err, null);
              console.log("Found:\n");
              console.log(docs);
+
+             db.dropCollection('dishes', (err, result) => {
+                 assert.equal(err, null);
+
+                 client.close();
+             });
          });
     });
 });
